@@ -1,4 +1,4 @@
-import { input } from './helpers';
+import { input } from './helpers.mjs';
 
 let incremented = 0;
 let last;
