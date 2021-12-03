@@ -2,6 +2,7 @@ import { input } from './helpers.mjs';
 
 let horiz = 0;
 let depth = 0;
+let aim = 0;
 
 for await (const line of input) {
   const [direction, amountStr] = line.split(/\s+/);
@@ -9,14 +10,15 @@ for await (const line of input) {
   switch (direction) {
     case 'forward':
       horiz += amount;
+      depth += aim * amount;
       break;
 
     case 'down':
-      depth += amount;
+      aim += amount;
       break;
 
     case 'up':
-      depth -= amount;
+      aim -= amount;
       break;
 
     default:

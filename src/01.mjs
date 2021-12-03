@@ -16,5 +16,4 @@ for await (const line of input) {
   }
 }
 
-console.log(`${incremented} were incremented`)
-
+console.log(`\n\n> ${incremented}`)
