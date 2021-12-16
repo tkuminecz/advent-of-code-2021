@@ -1,6 +1,5 @@
 import _ from "lodash";
 import chalk from "chalk-template";
-import { inspect } from "util";
 import { getLines } from "./helpers.mjs";
 
 const HEX_TO_BINARY = {

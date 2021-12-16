@@ -1,6 +1,5 @@
 import _ from "lodash";
 import chalk from "chalk-template";
-import { inspect} from 'util'
 import { getLines } from "./helpers.mjs";
 
 const HEX_TO_BINARY = {
@@ -61,7 +60,6 @@ const stringify = (binary, c) => {
 const parseLiteral = (version, data) => {
   let acc = [];
   let more = true;
-  // console.log("parseLiteral", stringify(data, 5));
   do {
     const [flag, ...chunk] = readBits(data, 5);
     acc = acc.concat(chunk);
@@ -78,27 +76,15 @@ const parseLiteral = (version, data) => {
 };
 
 const parseOperator = (version, type, data) => {
-  // console.log(`parseOperator()`);
   const length_type = readBits(data, 1);
   switch (toDecimal(length_type)) {
     case LENGTH_TYPE_BITS: {
-      // console.log(`- bit encoded length type`);
       const num_bits_data = readBits(data, 15);
       const num_bits = toDecimal(num_bits_data);
       const child_packets_data = readBits(data, num_bits);
-      // console.log({
-      //   num_bits,
-      //   num_bits_data: stringify(num_bits_data),
-      //   data: stringify(child_packets_data),
-      // });
       const children = [];
       while (child_packets_data.length > 0) {
         const child = parse(child_packets_data);
-        // console.log(
-        //   child,
-        //   stringify(child_packets_data),
-        //   child_packets_data.length
-        // );
         children.push(child);
       }
       return {
@@ -110,14 +96,11 @@ const parseOperator = (version, type, data) => {
     }
 
     case LENGTH_TYPE_NUM_SUBPACKETS: {
-      // console.log(`- num subpackets length type`);
       const num_subpackets_data = readBits(data, 11);
       const num_subpackets = toDecimal(num_subpackets_data);
-      // console.log({ num_subpackets, num_subpackets_data });
       const children = [];
       for (let i = 0; i < num_subpackets; i += 1) {
         const child = parse(data);
-        // console.log({ child, data: stringify(data) });
         children.push(child);
       }
       return {
@@ -131,11 +114,9 @@ const parseOperator = (version, type, data) => {
 };
 
 const parse = (packet) => {
-  // console.log("parsePacket()");
   const version_data = readBits(packet, 3);
   const version = toDecimal(version_data);
   const type = readBits(packet, 3);
-  // console.log({ version, type: toDecimal(type) });
   switch (toDecimal(type)) {
     case 4: // literal
       return parseLiteral(version, packet);
